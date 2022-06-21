@@ -1,0 +1,40 @@
+smart:
+# controls the rear two tires based on individual motors
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50  
+  rear_right_velocity_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: rear_right_wheel_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  rear_left_velocity_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: rear_left_wheel_joint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  front_right_steering_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: front_right_steering_joint
+    pid: {p: 40000.0, i: 200.0, d: 1.0}    
+  front_left_steering_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: front_left_steering_joint
+    pid: {p: 40000.0, i: 200.0, d: 1.0}
+  # 下面的代码实现了pid,使得小车会逐渐加速和减速，不加的话小车会立刻到给定速度，
+  # 而且会报错提示没有pid，上面的pid设置好像没有用
+  
+  # 通过rqt方便向订阅的话题发布转速与转角，rqt充当一个pub,sub代码通过cmdvel2gazebo.py文件实现,代码里的pub是代码内部逻辑用的 
+  # topic list: /smart/cmd_vel (在代码sub中的,为twist格式(rostopic info /smart/cmd_vel )) 
+  # node:cmdvel2gazebo   smart为robot_name 
+  
+  
+  # gazebo_ros_control:
+  #   pid_gains:
+  #     rear_right_wheel_joint:
+  #       p: 100.0
+  #       i: 0.5
+  #       d: 0.0
+  #     rear_left_wheel_joint:
+  #       p: 100.0
+  #       i: 0.5
+  #       d: 0.0
